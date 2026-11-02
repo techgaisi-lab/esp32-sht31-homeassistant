@@ -22,7 +22,7 @@ Die Firmware ist reine [ESPHome](https://esphome.io)-Konfiguration: kein eigener
 | Status            | –       | Online/Offline                                |
 | Neustart          | –       | Button zum Neustarten des ESP32               |
 
-Außerdem dabei: verschlüsselte API, Updates über WLAN (OTA) und ein Fallback-Hotspot, falls das WLAN nicht erreichbar ist.
+Außerdem dabei: automatische Erkennung in Home Assistant ohne Key-Eingabe, Updates über WLAN (OTA) und ein Fallback-Hotspot, falls das WLAN nicht erreichbar ist.
 
 ## Hardware
 
@@ -55,43 +55,29 @@ Außerdem dabei: verschlüsselte API, Updates über WLAN (OTA) und ein Fallback-
 
 ## Installation
 
-### 1. Repository klonen
+Die Konfiguration braucht nur `wifi_ssid` und `wifi_password` aus den ESPHome-Secrets. Beides legt ESPHome beim ersten Gerät automatisch an, danach musst du nichts mehr eintragen.
+
+### Variante A: ESPHome Add-on in Home Assistant (empfohlen)
+
+1. *Einstellungen → Add-ons → ESPHome Device Builder* installieren und öffnen
+2. **+ New Device** → Name `esp32-sht31` → **ESP32** → **Skip**
+3. Beim neuen Gerät auf **Edit** klicken, den gesamten Inhalt durch `esp32-sht31.yaml` ersetzen und speichern
+4. ESP32 per USB an den PC anschließen → **Install → Plug into this computer** (nur beim ersten Mal, danach per WLAN)
+5. Home Assistant meldet *Neues Gerät gefunden* → **Hinzufügen**
+
+### Variante B: ESPHome CLI
 
 ```bash
 git clone https://github.com/techgaisi-lab/esp32-sht31-homeassistant.git
 cd esp32-sht31-homeassistant
-```
-
-### 2. Zugangsdaten anlegen
-
-```bash
-cp secrets.example.yaml secrets.yaml
-```
-
-`secrets.yaml` mit eigenem WLAN und Passwörtern ausfüllen. Den API-Key erzeugst du mit:
-
-```bash
-openssl rand -base64 32
-```
-
-### 3. Flashen
-
-**Variante A: ESPHome Add-on in Home Assistant**
-
-1. *Einstellungen → Add-ons → ESPHome Device Builder* installieren und öffnen
-2. Inhalt von `esp32-sht31.yaml` als neues Gerät einfügen und die Werte aus `secrets.yaml` in die ESPHome-Secrets übernehmen
-3. **Install → Plug into this computer** (beim ersten Mal per USB, danach per WLAN)
-
-**Variante B: ESPHome CLI**
-
-```bash
+cp secrets.example.yaml secrets.yaml   # WLAN eintragen
 pip install esphome
 esphome run esp32-sht31.yaml
 ```
 
-### 4. In Home Assistant hinzufügen
+Danach erscheint das Gerät in Home Assistant unter *Einstellungen → Geräte & Dienste* und lässt sich mit einem Klick hinzufügen.
 
-Nach dem Start taucht das Gerät unter *Einstellungen → Geräte & Dienste* als **ESPHome** auf. Dort auf **Konfigurieren** klicken und den API-Key aus `secrets.yaml` eingeben.
+> **Hinweis:** Die API ist bewusst ohne Verschlüsselung konfiguriert, damit keine Key-Eingabe nötig ist. Im privaten Heimnetz ist das unkritisch. Wer Verschlüsselung möchte, ergänzt unter `api:` einen `encryption: key:`.
 
 ## Konfiguration
 

@@ -4,6 +4,9 @@
 #  Hardware : ESP32 DevKit (esp32dev) + Sensirion SHT31-D (I²C)
 #  Firmware : ESPHome
 #  Verdrahtung siehe README.md
+#
+#  Benötigt nur `wifi_ssid` und `wifi_password` in den ESPHome-Secrets.
+#  Diese legt ESPHome beim ersten Gerät automatisch an.
 # =============================================================================
 
 substitutions:
@@ -19,7 +22,7 @@ esphome:
   friendly_name: ${friendly_name}
   project:
     name: techgaisi-lab.esp32-sht31-homeassistant
-    version: "1.0.0"
+    version: "1.1.0"
 
 esp32:
   board: esp32dev
@@ -31,13 +34,12 @@ esp32:
 # -----------------------------------------------------------------------------
 logger:
 
+# Verbindung zu Home Assistant – wird automatisch erkannt, ohne Key-Eingabe
 api:
-  encryption:
-    key: !secret api_encryption_key
 
+# Updates über WLAN
 ota:
   - platform: esphome
-    password: !secret ota_password
 
 wifi:
   ssid: !secret wifi_ssid
@@ -45,7 +47,6 @@ wifi:
   # Fallback-Hotspot, falls das WLAN nicht erreichbar ist
   ap:
     ssid: "${friendly_name} Fallback"
-    password: !secret fallback_ap_password
 
 captive_portal:
 
