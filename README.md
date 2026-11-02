@@ -53,6 +53,33 @@ Außerdem dabei: automatische Erkennung in Home Assistant ohne Key-Eingabe, Upda
 
 > **Tipp:** Den Sensor mit ein paar Zentimetern Abstand zum ESP32 montieren. Der ESP32 erwärmt sich im Betrieb, und direkt daneben misst der Sensor sonst zu hohe Temperaturen.
 
+## Gehäuse
+
+<img src="enclosure/preview-base.png" alt="Gehäuse" width="420">
+
+3D-druckbares Gehäuse für die Wandmontage, 66 × 73 × 35 mm. Die STL-Dateien liegen in [`enclosure/`](enclosure).
+
+- **Zwei getrennte Kammern:** Der ESP32 sitzt oben, der Sensor unten. Dazwischen liegt eine doppelte Wand mit Luftspalt, damit die Abwärme des ESP32 die Messung nicht verfälscht.
+- **Belüftung:** Die Sensorkammer hat Schlitze an drei Seiten und im Deckel, die ESP32-Kammer gibt ihre Wärme nach oben ab.
+- **Kabel:** Unter dem ESP32 ist 24 mm Platz für Dupont-Stecker und Kabelreserve (ausgelegt auf 30-cm-Jumper-Kabel). Die Kabel laufen durch eine Durchführung in der Trennwand.
+- **Halterung:** Der ESP32 liegt auf Auflagen und wird vom Deckel niedergehalten. Der SHT31 sitzt auf einem Sockel mit Zentrierstift im Befestigungsloch.
+- **Montage:** Der Deckel wird mit 4 × M3×10 Blechschrauben befestigt, an die Wand kommt das Gehäuse über 2 Schlüssellöcher. USB-C ist rechts zugänglich.
+
+| Teil        | Datei                     | Ausrichtung                    |
+|-------------|---------------------------|--------------------------------|
+| Unterteil   | `enclosure/base.stl`      | Rückwand aufs Druckbett        |
+| Deckel      | `enclosure/lid.stl`       | Außenseite aufs Druckbett      |
+
+**Druckeinstellungen:** PLA oder PETG, 0,2 mm Schichthöhe, 3 Wände, 15 % Infill, ohne Stützstrukturen.
+
+**Zusammenbau:**
+1. Die 4 Jumper-Kabel durch die Kabeldurchführung fädeln und an den SHT31 stecken.
+2. Den SHT31 mit der Bauteilseite nach oben auf den Sockel setzen, mit dem Loch über dem Zentrierstift. Die Stiftleiste zeigt dabei zur Trennwand.
+3. Die Kabelreserve locker in der ESP32-Kammer aufrollen, die Kabel an den ESP32 stecken und ihn auf die Auflagen legen (USB-C nach rechts).
+4. Den Deckel aufschrauben.
+
+Alle Maße sind in [`enclosure/enclosure.scad`](enclosure/enclosure.scad) als Parameter hinterlegt. Weicht dein Board ab, passt du sie dort in [OpenSCAD](https://openscad.org) an und exportierst die STLs neu.
+
 ## Installation
 
 Die Konfiguration braucht nur `wifi_ssid` und `wifi_password` aus den ESPHome-Secrets. Beides legt ESPHome beim ersten Gerät automatisch an, danach musst du nichts mehr eintragen.
@@ -112,6 +139,11 @@ Für **mehrere Sensoren** einfach die YAML-Datei kopieren und `device_name` sowi
 .
 ├── esp32-sht31.yaml        # ESPHome-Konfiguration (Firmware)
 ├── secrets.example.yaml    # Vorlage für Zugangsdaten
+├── enclosure/
+│   ├── enclosure.scad      # Parametrisches Gehäuse (OpenSCAD)
+│   ├── base.stl            # Unterteil
+│   ├── lid.stl             # Deckel
+│   └── preview-base.png
 ├── .gitignore              # schließt secrets.yaml und Build-Dateien aus
 ├── LICENSE
 └── README.md
