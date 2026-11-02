@@ -1,0 +1,14 @@
+# Zugangsdaten
+secrets.yaml
+
+# ESPHome Build-Artefakte
+.esphome/
+**/.pioenvs/
+**/.piolibdeps/
+**/.pio/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
